@@ -25,12 +25,14 @@ import ContributePage from '../../client/components/pages/contribute';
 import DevelopPage from '../../client/components/pages/develop';
 import FAQPage from '../../client/components/pages/faq';
 import HelpPage from '../../client/components/pages/help';
+import {I18nextProvider} from 'react-i18next';
 import Index from '../../client/components/pages/index';
 import Layout from '../../client/containers/layout';
 import LicensingPage from '../../client/components/pages/licensing';
 import PrivacyPage from '../../client/components/pages/privacy';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
+import {createI18n} from '../../common/i18n/i18n';
 import express from 'express';
 import {getOrderedRevisions} from '../helpers/revisions';
 import target from '../templates/target';
@@ -86,13 +88,23 @@ function _createStaticRoute(route, title, PageComponent) {
 	router.get(route, (req, res) => {
 		const props = generateProps(req, res);
 
+		// Create a fresh i18n instance using the locale + resources the middleware loaded.
+		// I18nextProvider makes it available to useTranslation() inside renderToString.
+		const i18nInstance = createI18n(
+			res.locals.locale || 'en',
+			res.locals.i18nResources || {}
+		);
+
 		const markup = ReactDOMServer.renderToString(
-			<Layout {...propHelpers.extractLayoutProps(props)}>
-				<PageComponent/>
-			</Layout>
+			<I18nextProvider i18n={i18nInstance}>
+				<Layout {...propHelpers.extractLayoutProps(props)}>
+					<PageComponent/>
+				</Layout>
+			</I18nextProvider>
 		);
 
 		res.send(target({
+			locale: res.locals.locale || 'en',
 			markup,
 			page: title,
 			props: escapeProps(props),

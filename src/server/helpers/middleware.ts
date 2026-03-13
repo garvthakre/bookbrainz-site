@@ -32,7 +32,8 @@ import {getAcceptedLanguageCodes} from './i18n';
 import {getReviewsFromCB} from './critiquebrainz';
 import {getWikidataId} from '../../common/helpers/wikimedia';
 import log from 'log';
-
+import fs from 'fs';
+import path from 'path';
 
 interface $Request extends Request {
 	user: any
@@ -450,4 +451,30 @@ export function validateCollaboratorIdsForCollectionRemove(req, res, next) {
 	}
 
 	return next();
+}
+
+
+const SUPPORTED_LOCALES = ['en', 'fr', 'de']; // grows as Weblate adds languages
+
+export function i18nMiddleware(req: $Request, res: $Response, next: NextFunction) {
+	const [preferred = 'en'] = getAcceptedLanguageCodes(req);
+	// e.g. Accept-Language: fr-FR,fr;q=0.9,en;q=0.8 → preferred = 'fr'
+	const locale = SUPPORTED_LOCALES.includes(preferred) ? preferred : 'en';
+
+	const load = (ns: string) => {
+		try {
+			return JSON.parse(fs.readFileSync(
+				path.join(process.cwd(), 'public', 'locales', locale, `${ns}.json`), 'utf8'
+			));
+		}
+		catch {
+			return {}; // missing file never breaks the site — falls back to English
+		}
+	};
+
+	const resources = {[locale]: {common: load('common'), entityEditor: load('entityEditor')}};
+
+	res.locals.locale = locale;
+	res.locals.i18nResources = resources;
+	next();
 }

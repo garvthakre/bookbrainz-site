@@ -27,12 +27,14 @@ import ContributePage from '../../client/components/pages/contribute';
 import DevelopPage from '../../client/components/pages/develop';
 import FAQPage from '../components/pages/faq';
 import HelpPage from '../../client/components/pages/help';
+import {I18nextProvider} from 'react-i18next';
 import Index from '../components/pages/index';
 import Layout from '../containers/layout';
 import LicensingPage from '../../client/components/pages/licensing';
 import PrivacyPage from '../../client/components/pages/privacy';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {createI18n} from '../../common/i18n/i18n';
 
 
 const propsTarget = document.getElementById('props');
@@ -40,6 +42,11 @@ const props = propsTarget ? JSON.parse(propsTarget.innerHTML) : {};
 
 const pageTarget = document.getElementById('page');
 const page = propsTarget ? pageTarget.innerHTML : '';
+
+// Initialize i18next with the locale + resources the server already loaded.
+// Using the same data prevents any hydration mismatch between SSR and client.
+const {locale = 'en', resources = {}} = props.i18n || {};
+const i18nInstance = createI18n(locale, resources);
 
 const pageMap = {
 	About: AboutPage,
@@ -56,9 +63,11 @@ const Child = pageMap[page] || Index;
 
 const markup = (
 	<AppContainer>
-		<Layout {...extractLayoutProps(props)}>
-			<Child {...extractChildProps(props)}/>
-		</Layout>
+		<I18nextProvider i18n={i18nInstance}>
+			<Layout {...extractLayoutProps(props)}>
+				<Child {...extractChildProps(props)}/>
+			</Layout>
+		</I18nextProvider>
 	</AppContainer>
 );
 

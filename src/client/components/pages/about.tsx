@@ -21,6 +21,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import React from 'react';
 import {faXTwitter} from '@fortawesome/free-brands-svg-icons';
+import {useTranslation} from 'react-i18next';
 
 
 /**
@@ -29,13 +30,14 @@ import {faXTwitter} from '@fortawesome/free-brands-svg-icons';
  * page
  */
 function AboutPage(): JSX.Element {
+	const {t} = useTranslation('common');
 	const NESLink =
 		'https://ocharles.org.uk/blog/posts/' +
 			'2012-07-10-nes-does-it-better-1.html';
 
 	return (
 		<div>
-			<div className="page-header"><h1>About BookBrainz</h1></div>
+			<div className="page-header"><h1>{t('about.title')}</h1></div>
 			<p className="lead">
 				BookBrainz is an online encyclopaedia which contains
 				information about published literature. Our aim is to
@@ -62,7 +64,7 @@ function AboutPage(): JSX.Element {
 				information, and create links between pieces of information.
 			</p>
 
-			<h2>Accessing the data</h2>
+			<h2>{t('about.accessingData')}</h2>
 			<p>
 				The BookBrainz data is freely available to everyone, for any use.
 				Please see our <a href="/licensing"> licensing page</a> for more details.
@@ -76,7 +78,7 @@ function AboutPage(): JSX.Element {
 				<a href="https://api.bookbrainz.org/1/docs/"> live documentation</a>.
 			</p>
 
-			<h2>Contact Us</h2>
+			<h2>{t('about.contactUs')}</h2>
 			<div style={{
 				alignItems: 'center',
 				display: 'flex',
@@ -138,7 +140,7 @@ function AboutPage(): JSX.Element {
 				/>
 			</div>
 
-			<h2>Our Story</h2>
+			<h2>{t('about.ourStory')}</h2>
 			<p>
 				BookBrainz was conceived in 2011, during a discussion in
 				the MusicBrainz IRC channel. It was initially championed

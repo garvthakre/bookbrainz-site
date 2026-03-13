@@ -35,5 +35,17 @@ export function generateProps<T>(req: PassportRequest, res: Response, props?: T)
 	if (req.session && req.session.mergeQueue) {
 		baseObject.mergeQueue = req.session.mergeQueue;
 	}
-	return Object.assign(baseObject, res.locals, props);
+
+	const merged = Object.assign(baseObject, res.locals, props);
+
+	// Set i18n AFTER Object.assign — ensures res.locals never overrides it.
+	// This plain JSON object travels to the browser via the #props script tag,
+	// so the client can initialize i18next with the same locale + translations
+	// the server used, preventing any hydration mismatch.
+	merged.i18n = {
+		locale: res.locals.locale || 'en',
+		resources: res.locals.i18nResources || {}
+	};
+
+	return merged;
 }

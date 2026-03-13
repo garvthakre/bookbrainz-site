@@ -40,6 +40,7 @@ import path from 'path';
 import routes from './routes';
 import serveStatic from 'serve-static';
 import session from '../common/helpers/session';
+import {i18nMiddleware} from './helpers/middleware';
 
 
 // Initialize log-to-stdout  writer
@@ -91,7 +92,7 @@ else {
 app.use(express.static(path.join(rootDir, 'static')));
 
 app.use(session(process.env.NODE_ENV));
-
+app.use(i18nMiddleware);
 
 if (config.influx) {
 	initInflux(app, config);

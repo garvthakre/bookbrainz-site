@@ -457,8 +457,11 @@ export function validateCollaboratorIdsForCollectionRemove(req, res, next) {
 const SUPPORTED_LOCALES = ['en', 'fr', 'de']; // grows as Weblate adds languages
 
 export function i18nMiddleware(req: $Request, res: $Response, next: NextFunction) {
-	const [preferred = 'en'] = getAcceptedLanguageCodes(req);
-	// e.g. Accept-Language: fr-FR,fr;q=0.9,en;q=0.8 → preferred = 'fr'
+	// Cookie takes priority — set when user explicitly picks a language from the dropdown.
+	// Falls back to Accept-Language header for first-time visitors with no preference set.
+	const cookieLang = req.cookies?.bb_lang;
+	const [headerLang = 'en'] = getAcceptedLanguageCodes(req);
+	const preferred = cookieLang ?? headerLang;
 	const locale = SUPPORTED_LOCALES.includes(preferred) ? preferred : 'en';
 
 	const load = (ns: string) => {

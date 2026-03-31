@@ -33,6 +33,7 @@ import compression from 'compression';
 import config from '../common/helpers/config';
 import express from 'express';
 import favicon from 'serve-favicon';
+import {i18nMiddleware} from './helpers/middleware';
 import initInflux from './influx';
 import logNode from 'log-node';
 import logger from 'morgan';
@@ -40,7 +41,6 @@ import path from 'path';
 import routes from './routes';
 import serveStatic from 'serve-static';
 import session from '../common/helpers/session';
-import {i18nMiddleware} from './helpers/middleware';
 
 
 // Initialize log-to-stdout  writer

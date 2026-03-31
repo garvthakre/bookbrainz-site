@@ -32,6 +32,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Footer from './../components/footer';
+import LanguageSelector from '../components/language-selector';
 import MergeQueue from '../components/pages/parts/merge-queue';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -329,7 +330,7 @@ class Layout extends React.Component {
 	}
 
 	renderNavContent() {
-		const {homepage, hideSearch, user} = this.props;
+		const {availableLocales, currentLocale, homepage, hideSearch, user} = this.props;
 
 		/*
 		 * GOTCHA: Usage of react-bootstrap FormGroup component inside
@@ -364,6 +365,10 @@ class Layout extends React.Component {
 						</Nav.Link>
 					</Nav.Item>
 				</Nav>
+				<LanguageSelector
+					availableLocales={availableLocales ?? ['en']}
+					currentLocale={currentLocale ?? 'en'}
+				/>
 				{this.renderDocsDropdown()}
 				{
 					user && user.id ?
@@ -439,7 +444,9 @@ class Layout extends React.Component {
 Layout.displayName = 'Layout';
 Layout.propTypes = {
 	alerts: PropTypes.array.isRequired,
+	availableLocales: PropTypes.arrayOf(PropTypes.string),
 	children: PropTypes.node.isRequired,
+	currentLocale: PropTypes.string,
 	disableSignUp: PropTypes.bool,
 	hideSearch: PropTypes.bool,
 	homepage: PropTypes.bool,
@@ -450,6 +457,8 @@ Layout.propTypes = {
 	user: PropTypes.object
 };
 Layout.defaultProps = {
+	availableLocales: ['en'],
+	currentLocale: 'en',
 	disableSignUp: false,
 	hideSearch: false,
 	homepage: false,

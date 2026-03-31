@@ -21,6 +21,8 @@ import {omit, pick} from 'lodash';
 
 const LAYOUT_PROPS = [
 	'alerts',
+	'availableLocales',
+	'currentLocale',
 	'hideSearch',
 	'homepage',
 	'mergeQueue',

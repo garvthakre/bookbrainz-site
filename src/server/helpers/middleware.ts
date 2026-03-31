@@ -28,12 +28,13 @@ import {ENTITY_TYPES, getRelationshipTargetBBIDByTypeId} from '../../client/help
 import {getWikipediaExtract, selectWikipediaPage} from './wikimedia';
 
 import _ from 'lodash';
+import fs from 'fs';
 import {getAcceptedLanguageCodes} from './i18n';
 import {getReviewsFromCB} from './critiquebrainz';
 import {getWikidataId} from '../../common/helpers/wikimedia';
 import log from 'log';
-import fs from 'fs';
 import path from 'path';
+
 
 interface $Request extends Request {
 	user: any
@@ -454,30 +455,51 @@ export function validateCollaboratorIdsForCollectionRemove(req, res, next) {
 }
 
 
-const SUPPORTED_LOCALES = ['en', 'fr', 'de']; // grows as Weblate adds languages
+const SUPPORTED_LOCALES = ['en', 'fr', 'de'];
 
-export function i18nMiddleware(req: $Request, res: $Response, next: NextFunction) {
+export async function i18nMiddleware(req: $Request, res: $Response, next: NextFunction) {
 	// Cookie takes priority — set when user explicitly picks a language from the dropdown.
 	// Falls back to Accept-Language header for first-time visitors with no preference set.
-	const cookieLang = req.cookies?.bb_lang;
+	// Note: req.cookies is undefined without cookie-parser, so we parse the raw header.
+	const rawCookies = req.headers.cookie ?? '';
+	const cookieLang = rawCookies.split('; ')
+		.find(lang => lang.startsWith('bb_lang='))
+		?.split('=')[1];
 	const [headerLang = 'en'] = getAcceptedLanguageCodes(req);
 	const preferred = cookieLang ?? headerLang;
 	const locale = SUPPORTED_LOCALES.includes(preferred) ? preferred : 'en';
 
-	const load = (ns: string) => {
+
+	async function load(ns: string) {
 		try {
-			return JSON.parse(fs.readFileSync(
+			return JSON.parse(await fs.promises.readFile(
 				path.join(process.cwd(), 'public', 'locales', locale, `${ns}.json`), 'utf8'
 			));
 		}
 		catch {
-			return {}; // missing file never breaks the site — falls back to English
+			return {};
 		}
-	};
+	}
 
-	const resources = {[locale]: {common: load('common'), entityEditor: load('entityEditor')}};
+	const resources = {[locale]: {common: await load('common'), entityEditor: await load('entityEditor')}};
+
+	// Read which locale folders exist — dropdown automatically shows new languages
+	// without any code change when a Weblate PR adds a new public/locales/<code>/ folder.
+	let availableLocales: string[] = ['en'];
+	try {
+		const localesDir = path.join(process.cwd(), 'public', 'locales');
+		const entries = await fs.promises.readdir(localesDir, {withFileTypes: true});
+		availableLocales = entries
+			.filter((entry) => entry.isDirectory())
+			.map((entry) => entry.name);
+	}
+	catch {
+		// public/locales/ doesn't exist yet — fall back to English only
+	}
 
 	res.locals.locale = locale;
+	res.locals.currentLocale = locale;
 	res.locals.i18nResources = resources;
+	res.locals.availableLocales = availableLocales;
 	next();
 }

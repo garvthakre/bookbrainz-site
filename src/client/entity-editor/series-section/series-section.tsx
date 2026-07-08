@@ -116,7 +116,7 @@ function SeriesSection({
 	isUnifiedForm,
 	seriesTypeValue
 }: Props) {
-	const {t: translate} = useTranslation('entityEditor');
+	const {t: translate} = useTranslation(['entityEditor', 'common']);
 
 	const baseEntity = {
 		bbid: _.get(entity, 'bbid'),
@@ -188,7 +188,7 @@ function SeriesSection({
 				<Col lg={lgCol}>
 					<Form.Group>
 						<Form.Label>
-							{translate('seriesSection.orderingTypeLabel')}
+							{translate('common:orderingType')}
 							<OverlayTrigger delay={50} overlay={orderingTooltip}>
 								<FontAwesomeIcon
 									className="margin-left-0-5"
@@ -209,7 +209,7 @@ function SeriesSection({
 					{!isUnifiedForm &&
 					<Form.Group>
 						<Form.Label>
-							{translate('seriesSection.seriesTypeLabel')}
+							{translate('common:seriesType')}
 							<OverlayTrigger delay={50} overlay={seriesTypeTooltip}>
 								<FontAwesomeIcon
 									className="margin-left-0-5"

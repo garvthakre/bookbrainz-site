@@ -68,7 +68,7 @@ function SeriesSectionMerge({
 	onOrderTypeChange,
 	onSeriesTypeChange
 }: Props) {
-	const {t: translate} = useTranslation('entityEditor');
+	const {t: translate} = useTranslation(['entityEditor', 'common']);
 	const seriesOrderingTypeOptions = [];
 	const seriesTypeOptions = [];
 	const relationships = [];
@@ -108,13 +108,13 @@ function SeriesSectionMerge({
 		<div>
 			<MergeField
 				currentValue={orderTypeValue}
-				label={translate('seriesSection.orderingTypeLabel')}
+				label={translate('common:orderingType')}
 				options={seriesOrderingTypeOptions}
 				onChange={onOrderTypeChange}
 			/>
 			<MergeField
 				currentValue={seriesTypeValue}
-				label={translate('seriesSection.seriesTypeLabel')}
+				label={translate('common:seriesType')}
 				options={seriesTypeOptions}
 				onChange={onSeriesTypeChange}
 			/>

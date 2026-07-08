@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import {Rating} from 'react-simple-star-rating';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 
 
 function AverageRating({averageRatings, reviewsCount}) {
+	const {t: translate} = useTranslation('pages');
 	return (
 		<>
-			<dt>Ratings</dt>
+			<dt>{translate('entityDisplay.cbReviewModal.ratingLabel', {defaultValue: 'Ratings'})}</dt>
 			<dd>
 				<Rating
 					allowHalfIcon
@@ -22,7 +24,8 @@ function AverageRating({averageRatings, reviewsCount}) {
 			</dd>
 			<dd className="mt-n2 small text-muted">
 				{reviewsCount ?
-					`${reviewsCount} review${reviewsCount > 1 ? 's' : ''}` : 'No reviews'
+					translate('entityDisplay.cbReviews.reviewsCount', {count: reviewsCount}) :
+					translate('entityDisplay.cbReviews.noReviews')
 				}
 			</dd>
 		</>

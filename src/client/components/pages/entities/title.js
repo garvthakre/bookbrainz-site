@@ -22,6 +22,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {useTranslation} from 'react-i18next';
 
 
 const {
@@ -29,6 +30,7 @@ const {
 } = entityHelper;
 
 function EntityTitle({entity, handleModalToggle}) {
+	const {t: translate} = useTranslation('pages');
 	const aliases = getEntitySecondaryAliases(entity);
 	const disambiguation = getEntityDisambiguation(entity);
 	const label = getEntityLabel(entity);
@@ -43,7 +45,7 @@ function EntityTitle({entity, handleModalToggle}) {
 						onClick={handleModalToggle}
 					>
 						<FontAwesomeIcon icon={faPlus}/>
-						{'  Add a review'}
+						{`  ${translate('entityDisplay.title.addReview')}`}
 					</Button>
 				}
 			</h1>

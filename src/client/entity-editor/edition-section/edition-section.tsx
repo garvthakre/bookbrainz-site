@@ -368,7 +368,7 @@ function EditionSection({
 						empty={isNullDate(releaseDateValue)}
 						error={!isValidReleaseDate}
 						errorMessage={dateErrorMessage}
-						label={translate('shared.releaseDateLabel')}
+						label={translate('common:releaseDate')}
 						placeholder="YYYY-MM-DD"
 						tooltipText={translate('editionSection.releaseDateTooltip')}
 						onChangeDate={onReleaseDateChange}
@@ -474,7 +474,7 @@ function EditionSection({
 						disabled={!physicalEnable}
 						empty={_.isNil(weightValue)}
 						error={!validateEditionSectionWeight(weightValue)}
-						label={translate('shared.weightLabel')}
+						label={translate('common:weight')}
 						onChange={onWeightChange}
 					/>
 					<NumericField

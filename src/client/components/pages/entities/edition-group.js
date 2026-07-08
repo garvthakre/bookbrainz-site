@@ -33,12 +33,14 @@ import EntityReviews from './cb-review';
 import EntityTitle from './title';
 import PropTypes from 'prop-types';
 import WikipediaExtract from './wikipedia-extract';
+import {useTranslation} from 'react-i18next';
 
 
 const {deletedEntityMessage, getTypeAttribute, getEntityUrl, ENTITY_TYPE_ICONS, getSortNameOfDefaultAlias} = entityHelper;
 const {Col, Row} = bootstrap;
 
 function EditionGroupAttributes({editionGroup}) {
+	const {t: translate} = useTranslation(['pages', 'common']);
 	if (editionGroup.deleted) {
 		return deletedEntityMessage;
 	}
@@ -51,13 +53,13 @@ function EditionGroupAttributes({editionGroup}) {
 			<Row>
 				<Col lg={3}>
 					<dl>
-						<dt>Sort Name</dt>
+						<dt>{translate('common:sortName', {defaultValue: 'Sort Name'})}</dt>
 						<dd>{sortNameOfDefaultAlias}</dd>
 					</dl>
 				</Col>
 				<Col lg={3}>
 					<dl>
-						<dt>Type</dt>
+						<dt>{translate('common:type')}</dt>
 						<dd>{type}</dd>
 					</dl>
 				</Col>
@@ -80,6 +82,7 @@ EditionGroupAttributes.propTypes = {
 
 
 function EditionGroupDisplayPage({entity, identifierTypes, user, wikipediaExtract}) {
+	const {t: translate} = useTranslation('pages');
 	const [showCBReviewModal, setShowCBReviewModal] = React.useState(false);
 	const handleModalToggle = useCallback(() => {
 		setShowCBReviewModal(!showCBReviewModal);
@@ -103,12 +106,13 @@ function EditionGroupDisplayPage({entity, identifierTypes, user, wikipediaExtrac
 		);
 	}
 	else if (!entity.deleted && (hasAuthorCredits === true || hasAuthorCredits === null)) {
+		const unsetWarning = translate('entityDisplay.editionGroup.authorCreditUnset');
+		const editLinkText = translate('entityDisplay.editionGroup.editEditionGroupLink');
 		authorCreditSection = (
 			<div className="alert alert-warning text-center">
-				Author Credit unset; please&nbsp;
-				<a href={`/edition-group/${entity.bbid}/edit`}>edit this Edition Group</a>&nbsp;
-				and add its Author(s) if you see this!
-				You can copy the Author Credit from one of the Editions as well
+				{unsetWarning.split(editLinkText)[0]}
+				<a href={`/edition-group/${entity.bbid}/edit`}>{editLinkText}</a>
+				{unsetWarning.split(editLinkText)[1]}
 			</div>);
 	}
 

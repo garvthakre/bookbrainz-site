@@ -28,6 +28,7 @@ import EntityTitle from './title';
 import PropTypes from 'prop-types';
 import React from 'react';
 import WikipediaExtract from './wikipedia-extract';
+import {useTranslation} from 'react-i18next';
 
 
 const {deletedEntityMessage, extractAttribute, getTypeAttribute, getEntityUrl,
@@ -35,6 +36,7 @@ const {deletedEntityMessage, extractAttribute, getTypeAttribute, getEntityUrl,
 const {Col, Row} = bootstrap;
 
 function PublisherAttributes({publisher}) {
+	const {t: translate} = useTranslation(['pages', 'common']);
 	if (publisher.deleted) {
 		return deletedEntityMessage;
 	}
@@ -48,27 +50,27 @@ function PublisherAttributes({publisher}) {
 			<Row>
 				<Col lg={3}>
 					<dl>
-						<dt>Sort Name</dt>
+						<dt>{translate('common:sortName', {defaultValue: 'Sort Name'})}</dt>
 						<dd>{sortNameOfDefaultAlias}</dd>
 					</dl>
 				</Col>
 				<Col lg={3}>
 					<dl>
-						<dt>Type</dt>
+						<dt>{translate('common:type')}</dt>
 						<dd>{type}</dd>
 					</dl>
 				</Col>
 				<Col lg={3}>
 					<dl>
-						<dt>Area</dt>
+						<dt>{translate('common:area')}</dt>
 						<dd>{area}</dd>
 					</dl>
 				</Col>
 				<Col lg={3}>
 					<dl>
-						<dt>Date Founded</dt>
+						<dt>{translate('common:dateFounded')}</dt>
 						<dd>{beginDate}</dd>
-						<dt>Date Dissolved</dt>
+						<dt>{translate('common:dateDissolved')}</dt>
 						<dd>{endDate}</dd>
 					</dl>
 				</Col>

@@ -19,12 +19,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Relationship from '../../../entity-editor/relationship-editor/relationship';
+import {useTranslation} from 'react-i18next';
 
 
 function EntityRelationships({contextEntity, relationships, entityUrl}) {
+	const {t: translate} = useTranslation(['pages', 'common']);
 	return (
 		<div>
-			<h2>Relationships</h2>
+			<h2>{translate('common:relationships', {defaultValue: 'Relationships'})}</h2>
 			{relationships?.length > 0 ? (
 				<ul className="list-unstyled">
 					{relationships.map((relationship) => (
@@ -43,7 +45,12 @@ function EntityRelationships({contextEntity, relationships, entityUrl}) {
 				</ul>
 			) : (
 				<p className="text-muted">
-					<b>No relationships.</b> <a href={`${entityUrl}/edit`}>Click here to edit</a> and create new relationships.
+					<b>{translate('entityDisplay.relationships.noRelationships')}</b>{' '}
+					{translate('entityDisplay.relationships.editInstructions').split('Click here to edit')[0]}
+					<a href={`${entityUrl}/edit`}>
+						{translate('entityDisplay.relationships.editLinkText', {defaultValue: 'Click here to edit'})}
+					</a>
+					{translate('entityDisplay.relationships.editInstructions').split('Click here to edit')[1]}
 				</p>
 			)}
 		</div>

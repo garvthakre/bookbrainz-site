@@ -153,7 +153,7 @@ function SortNameField({
 
 	const label = (
 		<ValidationLabel empty={empty} error={error}>
-			{translate('sortNameField.label')}
+			{translate('common:sortName')}
 		</ValidationLabel>
 	);
 

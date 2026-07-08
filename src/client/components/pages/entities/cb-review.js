@@ -24,6 +24,7 @@ import {Rating} from 'react-simple-star-rating';
 import React from 'react';
 import _ from 'lodash';
 import request from 'superagent';
+import {withTranslation} from 'react-i18next';
 
 
 const {Button, Row} = bootstrap;
@@ -35,7 +36,7 @@ function ReviewCard(props) {
 	if (!props?.reviewData || _.isEmpty(props.reviewData)) {
 		return null;
 	}
-	const {reviewData} = props;
+	const {reviewData, translate} = props;
 	const publishedDate = new Date(reviewData.published_on).toDateString();
 	let reviewText = reviewData.text;
 	if (reviewText?.length > REVIEW_CONTENT_PREVIEW_LENGTH) {
@@ -57,11 +58,11 @@ function ReviewCard(props) {
 					stars={5}
 				/>
 				<small className="float-right">
-					Review by: <b>{reviewData.user.display_name}</b> {publishedDate}
+					{translate('entityDisplay.cbReviews.reviewBy')}<b>{reviewData.user.display_name}</b> {publishedDate}
 				</small>
 			</div>
 			{reviewText}
-			<a className="float-right" href={reviewLink}>View &gt;</a>
+			<a className="float-right" href={reviewLink}>{translate('entityDisplay.cbReviews.view')}</a>
 		</div>
 	);
 }
@@ -90,6 +91,7 @@ class EntityReviews extends React.Component {
 	}
 
 	render() {
+		const {t: translate} = this.props;
 		let reviewContent;
 		const mapEntityType = {
 			Author: 'author',
@@ -108,24 +110,25 @@ class EntityReviews extends React.Component {
 							<ReviewCard
 								key={review.id}
 								reviewData={review}
+								translate={translate}
 							/>
 						))
 					}
-					<a href={entityLink}>View all reviews &gt;</a>
+					<a href={entityLink}>{translate('entityDisplay.cbReviews.viewAll')}</a>
 				</React.Fragment>
 			);
 		}
 		else if (this.state.successfullyFetched) {
 			reviewContent = (
 				<div>
-					<h4>No reviews yet.</h4>
+					<h4>{translate('entityDisplay.cbReviews.noReviewsYet')}</h4>
 					<Button
 						className="margin-top-d15"
 						variant="success"
 						onClick={this.handleModalToggle}
 					>
 						<FontAwesomeIcon icon={faPlus}/>
-						{'  Add a review'}
+						{`  ${translate('entityDisplay.title.addReview')}`}
 					</Button>
 				</div>
 			);
@@ -133,13 +136,13 @@ class EntityReviews extends React.Component {
 		else {
 			reviewContent = (
 				<div>
-					<h4>Could not fetch reviews.</h4>
+					<h4>{translate('entityDisplay.cbReviews.couldNotFetch')}</h4>
 					<Button
 						variant="danger"
 						onClick={this.handleClick}
 					>
 						<FontAwesomeIcon icon={faRotate}/>
-						{'   Retry'}
+						{`   ${translate('common:button.retry', {defaultValue: 'Retry'})}`}
 					</Button>
 				</div>
 			);
@@ -147,10 +150,11 @@ class EntityReviews extends React.Component {
 		return (
 			<Row className="flex-column">
 				<h2>
-                    Reviews
+					{translate('entityDisplay.cbReviews.heading', {defaultValue: 'Reviews'})}
 					<span className="small text-muted">
-					    {this.reviewsCount ?
-						    ` ${this.reviewsCount} review${this.reviewsCount > 1 ? 's' : ''}` : ' No reviews'
+						{this.reviewsCount ?
+							` ${translate('entityDisplay.cbReviews.reviewsCount', {count: this.reviewsCount})}` :
+							` ${translate('entityDisplay.cbReviews.noReviews')}`
 						}
 					</span>
 				</h2>
@@ -173,7 +177,8 @@ ReviewCard.propTypes = {
 			// eslint-disable-next-line camelcase
 			display_name: PropTypes.string.isRequired
 		}).isRequired
-	}).isRequired
+	}).isRequired,
+	translate: PropTypes.func.isRequired
 };
 
 
@@ -182,8 +187,10 @@ EntityReviews.propTypes = {
 	entityBBID: PropTypes.string.isRequired,
 	entityReviews: PropTypes.object.isRequired,
 	entityType: PropTypes.string.isRequired,
-	handleModalToggle: PropTypes.func.isRequired
+	handleModalToggle: PropTypes.func.isRequired,
+	// eslint-disable-next-line id-length
+	t: PropTypes.func.isRequired
 };
 
 
-export default EntityReviews;
+export default withTranslation(['pages', 'common'])(EntityReviews);

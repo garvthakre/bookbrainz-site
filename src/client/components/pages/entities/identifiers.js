@@ -19,12 +19,14 @@
 import IdentifierLink from './identifiers-links';
 import PropTypes from 'prop-types';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 
 
 function EntityIdentifiers({entityUrl, identifiers, identifierTypes}) {
+	const {t: translate} = useTranslation(['pages', 'common']);
 	return (
 		<div>
-			<h2>Identifiers</h2>
+			<h2>{translate('common:identifiers', {defaultValue: 'Identifiers'})}</h2>
 			{
 
 				identifiers?.length > 0 ?
@@ -53,11 +55,13 @@ function EntityIdentifiers({entityUrl, identifiers, identifierTypes}) {
 						];
 					}) :
 					<p className="text-muted">
-						<b>No identifiers.</b>
+						<b>{translate('common:noIdentifiers')}</b>
 						&nbsp;
+						{translate('entityDisplay.identifiers.editInstructions').split('Click here to edit')[0]}
 						<a href={`${entityUrl}/edit`}>
-							Click here to edit
-						</a> and add new identifiers (e.g. ISBN, Wikidata ID, etc.).
+							{translate('entityDisplay.identifiers.editLinkText', {defaultValue: 'Click here to edit'})}
+						</a>
+						{translate('entityDisplay.identifiers.editInstructions').split('Click here to edit')[1]}
 					</p>
 			}
 		</div>

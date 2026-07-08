@@ -23,6 +23,7 @@ import DOMPurify from 'isomorphic-dompurify';
 import type {LazyLoadedEntityT} from 'bookbrainz-data/lib/types/entity';
 import {getAliasLanguageCodes} from '../../../../common/helpers/utils';
 import {uniq} from 'lodash';
+import {useTranslation} from 'react-i18next';
 
 
 type Props = {
@@ -45,6 +46,7 @@ async function getWikipediaExtractForWikidata(wikidataId: string, preferredLangu
 
 
 function WikipediaExtract({entity, articleExtract}: Props) {
+	const {t: translate} = useTranslation(['pages', 'common']);
 	const [state, setState] = useState(articleExtract);
 
 	useEffect(() => {
@@ -71,20 +73,29 @@ function WikipediaExtract({entity, articleExtract}: Props) {
 	const {extract, article} = state;
 	const licenseUrl = 'https://creativecommons.org/licenses/by-sa/3.0/';
 
-	return extract ? (
+	if (!extract) {
+		return null;
+	}
+
+	const licenseNotice = translate('entityDisplay.wikipedia.licenseNotice');
+	const ccLinkText = translate('entityDisplay.wikipedia.creativeCommonsLink');
+
+	return (
 		<Row className="wikipedia-extract">
 			<Col>
-				<h2>Wikipedia</h2>
+				<h2>{translate('common:wikipedia', {defaultValue: 'Wikipedia'})}</h2>
 				{/* eslint-disable-next-line react/no-danger */}
 				<div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(extract)}}/>
-				<a href={buildWikipediaUrl(article)?.href}>Continue reading at Wikipedia...</a>
+				<a href={buildWikipediaUrl(article)?.href}>{translate('common:continueReadingWikipedia')}</a>
 				{' '}
 				<small>
-					Wikipedia content provided under the terms of the <a href={licenseUrl}>Creative Commons BY-SA license</a>
+					{licenseNotice.split(ccLinkText)[0]}
+					<a href={licenseUrl}>{ccLinkText}</a>
+					{licenseNotice.split(ccLinkText)[1]}
 				</small>
 			</Col>
 		</Row>
-	) : null;
+	);
 }
 
 WikipediaExtract.defaultProps = {

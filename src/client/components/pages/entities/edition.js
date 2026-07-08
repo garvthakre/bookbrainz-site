@@ -31,6 +31,7 @@ import React from 'react';
 import WikipediaExtract from './wikipedia-extract';
 import WorksTable from './work-table';
 import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons';
+import {useTranslation} from 'react-i18next';
 
 
 const {
@@ -40,6 +41,7 @@ const {
 const {Col, Row} = bootstrap;
 
 function EditionAttributes({edition}) {
+	const {t: translate} = useTranslation(['pages', 'common']);
 	if (edition.deleted) {
 		return deletedEntityMessage;
 	}
@@ -62,19 +64,19 @@ function EditionAttributes({edition}) {
 			<Row>
 				<Col lg={3}>
 					<dl>
-						<dt>Sort Name</dt>
+						<dt>{translate('common:sortName', {defaultValue: 'Sort Name'})}</dt>
 						<dd>{sortNameOfDefaultAlias}</dd>
-						<dt>Release Date</dt>
+						<dt>{translate('common:releaseDate', {defaultValue: 'Release Date'})}</dt>
 						<dd>{releaseDate}</dd>
-						<dt>Format</dt>
+						<dt>{translate('common:format', {defaultValue: 'Format'})}</dt>
 						<dd>{format}</dd>
 					</dl>
 				</Col>
 				<Col lg={3}>
 					<dl>
-						<dt>Status</dt>
+						<dt>{translate('common:status', {defaultValue: 'Status'})}</dt>
 						<dd>{status}</dd>
-						<dt>Languages</dt>
+						<dt>{translate('common:languages', {defaultValue: 'Languages'})}</dt>
 						<dd>{languages}</dd>
 					</dl>
 				</Col>
@@ -82,18 +84,18 @@ function EditionAttributes({edition}) {
 					<dl>
 						{format !== 'eBook' &&
 						<>
-							<dt>Dimensions (WxHxD)</dt>
+							<dt>{translate('common:dimensions', {defaultValue: 'Dimensions (WxHxD)'})}</dt>
 							<dd>{width}&times;{height}&times;{depth} mm</dd>
-							<dt>Weight</dt>
+							<dt>{translate('common:weight', {defaultValue: 'Weight'})}</dt>
 							<dd>{weight} g</dd>
 						</>}
-						<dt>Page Count</dt>
+						<dt>{translate('common:pageCount', {defaultValue: 'Page Count'})}</dt>
 						<dd>{pageCount}</dd>
 					</dl>
 				</Col>
 				<Col lg={3}>
 					<dl>
-						<dt>Publishers</dt>
+						<dt>{translate('common:entityType.publisher_plural', {defaultValue: 'Publishers'})}</dt>
 						<dd>{publishers}</dd>
 					</dl>
 				</Col>
@@ -108,6 +110,7 @@ EditionAttributes.propTypes = {
 
 
 function EditionDisplayPage({entity, identifierTypes, user, wikipediaExtract}) {
+	const {t: translate} = useTranslation('pages');
 	// relationshipTypeId = 10 refers the relation (<Work> is contained by <Edition>)
 	const relationshipTypeId = 10;
 	const worksContainedByEdition = getRelationshipTargetByTypeId(entity, relationshipTypeId);
@@ -124,11 +127,13 @@ function EditionDisplayPage({entity, identifierTypes, user, wikipediaExtract}) {
 		);
 	}
 	else if (!entity.deleted && (hasAuthorCredits === true || hasAuthorCredits === null)) {
+		const unsetWarning = translate('entityDisplay.edition.authorCreditUnset', {defaultValue: 'Author Credit unset; please edit this Edition and add its Author(s) if you see this!'});
+		const editLinkText = translate('entityDisplay.edition.editEditionLink', {defaultValue: 'edit this Edition'});
 		authorCreditSection = (
 			<div className="alert alert-warning text-center">
-				Author Credit unset; please&nbsp;
-				<a href={`/edition/${entity.bbid}/edit`}>edit this Edition</a>&nbsp;
-				and add its Author(s) if you see this!
+				{unsetWarning.split(editLinkText)[0]}
+				<a href={`/edition/${entity.bbid}/edit`}>{editLinkText}</a>
+				{unsetWarning.split(editLinkText)[1]}
 			</div>);
 	}
 
@@ -138,17 +143,19 @@ function EditionDisplayPage({entity, identifierTypes, user, wikipediaExtract}) {
 			<div className="margin-bottom-d15">
 				<a href={`/edition-group/${entity.editionGroup.bbid}`}>
 					<FontAwesomeIcon icon={faExternalLinkAlt}/>
-					<span>&nbsp;See all similar editions</span>
+					<span>&nbsp;{translate('entityDisplay.edition.seeSimilarEditions', {defaultValue: 'See all similar editions'})}</span>
 				</a>
 			</div>
 		);
 	}
 	else if (!entity.deleted) {
+		const unsetWarning = translate('entityDisplay.edition.editionGroupUnset', {defaultValue: 'Edition Group unset - please edit this Edition and add one if you see this!'});
+		const editLinkText = translate('entityDisplay.edition.editEditionLink', {defaultValue: 'edit this Edition'});
 		editionGroupSection = (
 			<div className="alert alert-warning text-center">
-				Edition Group unset - please&nbsp;
-				<a href={`/edition/${entity.bbid}/edit`}>edit this Edition</a>&nbsp;
-				and add one if you see this!
+				{unsetWarning.split(editLinkText)[0]}
+				<a href={`/edition/${entity.bbid}/edit`}>{editLinkText}</a>
+				{unsetWarning.split(editLinkText)[1]}
 			</div>
 		);
 	}

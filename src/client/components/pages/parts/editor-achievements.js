@@ -108,7 +108,7 @@ class EditorAchievementTab extends React.Component {
 					</CardDeck>
 					<span className="margin-left-1">
 						<Button type="submit" variant="success">
-							{translate('pages:achievements.updateButton')}
+							{translate('common:button.update')}
 						</Button>
 						<span className="margin-left-1">
 							{translate('pages:achievements.unsetInstructions')}
@@ -174,4 +174,4 @@ EditorAchievementTab.propTypes = {
 	t: PropTypes.func.isRequired
 };
 
-export default withTranslation('pages')(EditorAchievementTab);
+export default withTranslation(['pages', 'common'])(EditorAchievementTab);

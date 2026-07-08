@@ -239,7 +239,7 @@ function EditionSectionMerge({
 			/>
 			<MergeField
 				currentValue={releaseDateValue}
-				label={translate('shared.releaseDateLabel')}
+				label={translate('common:releaseDate')}
 				options={releaseDateOptions}
 				onChange={onReleaseDateChange}
 			/>
@@ -288,7 +288,7 @@ function EditionSectionMerge({
 			/>
 			<MergeField
 				currentValue={weightValue}
-				label={translate('shared.weightLabel')}
+				label={translate('common:weight')}
 				options={weightOptions}
 				onChange={onWeightChange}
 			/>

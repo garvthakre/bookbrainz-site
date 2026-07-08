@@ -31,12 +31,14 @@ import EntityReviews from './cb-review';
 import EntityTitle from './title';
 import PropTypes from 'prop-types';
 import WikipediaExtract from './wikipedia-extract';
+import {useTranslation} from 'react-i18next';
 
 
 const {deletedEntityMessage, getEntityUrl, ENTITY_TYPE_ICONS, getSortNameOfDefaultAlias} = entityHelper;
 const {Col, Row} = bootstrap;
 
 function SeriesAttributes({series}) {
+	const {t: translate} = useTranslation(['pages', 'common']);
 	if (series.deleted) {
 		return deletedEntityMessage;
 	}
@@ -48,25 +50,25 @@ function SeriesAttributes({series}) {
 			<Row>
 				<Col lg={3}>
 					<dl>
-						<dt>Sort Name</dt>
+						<dt>{translate('common:sortName', {defaultValue: 'Sort Name'})}</dt>
 						<dd>{sortNameOfDefaultAlias}</dd>
 					</dl>
 				</Col>
 				<Col lg={2}>
 					<dl>
-						<dt>Series Type</dt>
+						<dt>{translate('common:seriesType', {defaultValue: 'Series Type'})}</dt>
 						<dd>{series.entityType}</dd>
 					</dl>
 				</Col>
 				<Col lg={2}>
 					<dl>
-						<dt>Ordering Type</dt>
+						<dt>{translate('common:orderingType', {defaultValue: 'Ordering Type'})}</dt>
 						<dd>{series.seriesOrderingType.label}</dd>
 					</dl>
 				</Col>
 				<Col lg={2}>
 					<dl>
-						<dt>Total Items</dt>
+						<dt>{translate('common:totalItems', {defaultValue: 'Total Items'})}</dt>
 						<dd>{series.seriesItems.length}</dd>
 					</dl>
 				</Col>

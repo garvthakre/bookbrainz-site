@@ -22,6 +22,7 @@ import * as utilHelper from '../../../helpers/utils';
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 
 
 const {Table} = bootstrap;
@@ -78,6 +79,7 @@ PublisherTableRow.defaultProps = {
 };
 
 function PublisherTable({showAddedAtColumn, publishers, showCheckboxes, selectedEntities, onToggleRow}) {
+	const {t: translate} = useTranslation(['pages', 'common']);
 	let tableContent;
 	if (publishers.length) {
 		tableContent = (
@@ -86,13 +88,13 @@ function PublisherTable({showAddedAtColumn, publishers, showCheckboxes, selected
 					<thead>
 						<tr>
 							{publishers[0].displayNumber && <th style={{width: '10%'}}>#</th>}
-							<th>Name</th>
-							<th>Area</th>
-							<th>Type</th>
-							<th>Date founded</th>
-							<th>Date dissolved</th>
+							<th>{translate('common:name')}</th>
+							<th>{translate('common:area')}</th>
+							<th>{translate('common:type')}</th>
+							<th>{translate('common:dateFounded')}</th>
+							<th>{translate('common:dateDissolved')}</th>
 							{
-								showAddedAtColumn ? <th>Added at</th> : null
+								showAddedAtColumn ? <th>{translate('common:addedAt')}</th> : null
 							}
 						</tr>
 					</thead>
@@ -115,11 +117,11 @@ function PublisherTable({showAddedAtColumn, publishers, showCheckboxes, selected
 		);
 	}
 	else {
-		tableContent = <span>No publishers</span>;
+		tableContent = <span>{translate('entityDisplay.table.noPublishers')}</span>;
 	}
 	return (
 		<div>
-			<h2>Publishers</h2>
+			<h2>{translate('common:entityType.publisher_plural', {defaultValue: 'Publishers'})}</h2>
 			{tableContent}
 		</div>
 	);

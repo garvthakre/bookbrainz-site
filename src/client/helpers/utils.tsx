@@ -73,14 +73,14 @@ export function labelsForAuthor(isGroup: boolean, translate?: any) {
 				translate('entityEditor:authorSection.beginAreaLabel.group') :
 				translate('entityEditor:authorSection.beginAreaLabel.person'),
 			beginDateLabel: isGroup ?
-				translate('entityEditor:authorSection.beginDateLabel.group') :
-				translate('entityEditor:authorSection.beginDateLabel.person'),
+				translate('common:dateFounded') :
+				translate('common:dateOfBirth'),
 			endAreaLabel: isGroup ?
 				translate('entityEditor:authorSection.endAreaLabel.group') :
 				translate('entityEditor:authorSection.endAreaLabel.person'),
 			endDateLabel: isGroup ?
 				translate('entityEditor:authorSection.endDateLabel.group') :
-				translate('entityEditor:authorSection.endDateLabel.person'),
+				translate('common:dateOfDeath'),
 			endedLabel: isGroup ?
 				translate('entityEditor:shared.dissolvedLabel') :
 				translate('entityEditor:authorSection.endedLabel.person')

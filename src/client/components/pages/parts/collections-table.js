@@ -150,7 +150,7 @@ class CollectionsTable extends React.Component {
 									}
 									{
 										showLastModified ?
-											<th width="16%">{translate('pages:collections.headerLastModified')}</th> : null
+											<th width="16%">{translate('common:lastModified')}</th> : null
 									}
 								</tr>
 							</thead>
